@@ -93,7 +93,7 @@ async def playwright_worker_main():
     from playwright.async_api import async_playwright # Import here to be in the right context
     pw_instance = await async_playwright().start()
     browser: Browser = await pw_instance.chromium.launch(
-        headless=False, # Set to True for production if no UI is needed
+        headless=True, # Set to True for production if no UI is needed
         args=["--no-sandbox", "--disable-dev-shm-usage", "--window-size=1920,1080"]
     )
     print("→ Playwright worker: browser launched.")
@@ -240,7 +240,7 @@ async def handle_one_job(
         modal_title_loc = page.locator("div.modal-snovio__title", has_text="Create a new prospects list")
         await modal_title_loc.wait_for(state="visible", timeout=20_000)
         
-        name_input_modal_loc = page.locator("div.modal-snovio__window input.snov-input-wrapper__input--minimized")
+        name_input_modal_loc = page.locator("div.modal-snovio__window input.snov-input__input")
         await name_input_modal_loc.wait_for(state="visible", timeout=20_000)
         await name_input_modal_loc.fill(str(downloadFileName)) 
         await asyncio.sleep(0.2)
